@@ -6,4 +6,5 @@ public static class CellsRegistry
     public static Wall Wall = new();
     public static Path Path = new();
     public static Mine Mine = new();
+    public static Exit Exit = new();
 }

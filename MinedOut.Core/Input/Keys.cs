@@ -5,5 +5,7 @@ public enum Keys
     Up,
     Down,
     Left,
-    Right
+    Right,
+    Escape,
+    Enter
 }

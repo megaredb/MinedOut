@@ -6,10 +6,6 @@ public abstract class GameObject
 {
     public delegate void PositionChangedHandler(PositionChangedEventArgs eventArgs);
 
-    public readonly List<GameObject> Children = new();
-
-    public readonly GameObject? Parent = null;
-
     private Vector2I _position = new();
 
     public Vector2I Position
@@ -31,17 +27,12 @@ public abstract class GameObject
 
     public event PositionChangedHandler? PositionChanged;
 
+    public void Drop()
+    {
+        PositionChanged = null;
+    }
+
     public virtual void Tick()
     {
-    }
-
-    public void AddChild(GameObject element)
-    {
-        Children.Add(element);
-    }
-
-    public void RemoveChild(GameObject element)
-    {
-        Children.Remove(element);
     }
 }

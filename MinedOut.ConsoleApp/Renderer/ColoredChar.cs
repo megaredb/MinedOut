@@ -12,4 +12,10 @@ public class ColoredChar
         Color = color;
         BackgroundColor = backgroundColor;
     }
+
+    public static List<ColoredChar> FromString(string value, ConsoleColor color = ConsoleColor.White,
+        ConsoleColor? backgroundColor = null)
+    {
+        return value.Select(c => new ColoredChar(c, color, backgroundColor)).ToList();
+    }
 }

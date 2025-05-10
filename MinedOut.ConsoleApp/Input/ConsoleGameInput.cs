@@ -15,7 +15,9 @@ public class ConsoleGameInput(GameState gameState) : IGameInput
             { ConsoleKey.A, Keys.Left },
             { ConsoleKey.LeftArrow, Keys.Left },
             { ConsoleKey.D, Keys.Right },
-            { ConsoleKey.RightArrow, Keys.Right }
+            { ConsoleKey.RightArrow, Keys.Right },
+            { ConsoleKey.Escape, Keys.Escape },
+            { ConsoleKey.Enter, Keys.Enter }
         };
 
     public event IGameInput.KeyPressEventHandler? KeyPressed;
@@ -27,7 +29,7 @@ public class ConsoleGameInput(GameState gameState) : IGameInput
 
     public void Run()
     {
-        while (true)
+        while (gameState.IsRunning)
         {
             var key = Console.ReadKey(true).Key;
 

@@ -12,4 +12,18 @@
         <ProjectReference Include="..\MinedOut.Core\MinedOut.Core.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="Data\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="runtimes\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SoundFlow" Version="1.0.3"/>
+    </ItemGroup>
+
 </Project>
