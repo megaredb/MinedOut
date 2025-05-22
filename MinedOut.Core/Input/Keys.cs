@@ -7,5 +7,10 @@ public enum Keys
     Left,
     Right,
     Escape,
-    Enter
+    Enter,
+    H,
+    E,
+    O,
+    Y,
+    M
 }

@@ -23,7 +23,7 @@ public class GameWorld
 
     public int Height { get; private set; }
     public int Width { get; private set; }
-    private Cell[,] Grid { get; set; } = null!;
+    public Cell[,] Grid { get; set; } = null!;
 
     public List<Entity> Entities { get; } = new();
 

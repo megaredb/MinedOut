@@ -19,7 +19,7 @@ public class MenuController : Controller
     private void OnInputGained(KeyPressEventArgs eventArgs)
     {
         if (_gameState.Screen != Screen.Menu) return;
-        if (eventArgs.Key == Keys.Enter)
+        if (eventArgs.Key == Keys.Enter && !_gameState.ExitConfirmation)
             _gameState.CallNextLevel();
     }
 }

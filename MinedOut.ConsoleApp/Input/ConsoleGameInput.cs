@@ -17,15 +17,15 @@ public class ConsoleGameInput(GameState gameState) : IGameInput
             { ConsoleKey.D, Keys.Right },
             { ConsoleKey.RightArrow, Keys.Right },
             { ConsoleKey.Escape, Keys.Escape },
-            { ConsoleKey.Enter, Keys.Enter }
+            { ConsoleKey.Enter, Keys.Enter },
+            { ConsoleKey.H, Keys.H },
+            { ConsoleKey.E, Keys.E },
+            { ConsoleKey.O, Keys.O },
+            { ConsoleKey.Y, Keys.Y },
+            { ConsoleKey.M, Keys.M }
         };
 
     public event IGameInput.KeyPressEventHandler? KeyPressed;
-
-    public static IGameInput CreateInstance(GameState gameState)
-    {
-        return new ConsoleGameInput(gameState);
-    }
 
     public void Run()
     {

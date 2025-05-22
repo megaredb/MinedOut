@@ -85,7 +85,30 @@ public class WorldGenerator
             );
         }
 
-        for (var x = -1; x <= 1; x++) world[cursor.X + x, cursor.Y] = CellsRegistry.Exit;
+        for (var x = -1; x <= 1; x++)
+            world[Math.Clamp(cursor.X + x, 0, world.Width - 1), Math.Clamp(cursor.Y, 0, world.Height - 1)] =
+                CellsRegistry.Exit;
+
+        return world;
+    }
+
+    private GameWorld PlaceLiveMine(GameWorld world)
+    {
+        List<Vector2I> minesPositions = new();
+
+        for (var x = 1; x < world.Width - 1; x++)
+        for (var y = 1; y < world.Height - 1; y++)
+            if (world[x, y] is Mine)
+                minesPositions.Add(new Vector2I(x, y));
+
+        var liveMineCount = 0;
+
+        do
+        {
+            var liveMine = new LiveMine(minesPositions[_random.Next(0, Math.Abs(minesPositions.Count - 1) / 2)]);
+            world.AddEntity(liveMine);
+            liveMineCount++;
+        } while (_random.Next(0, 5) < 1 && liveMineCount < 1);
 
         return world;
     }
@@ -97,6 +120,7 @@ public class WorldGenerator
         world = MineLayer(world);
         world = WallLayer(world);
         world = PlacePlayer(world);
+        world = PlaceLiveMine(world);
 
         foreach (var entity in world.Entities)
         {

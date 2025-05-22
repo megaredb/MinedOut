@@ -7,6 +7,7 @@ public abstract class GameObject
     public delegate void PositionChangedHandler(PositionChangedEventArgs eventArgs);
 
     private Vector2I _position = new();
+    public bool IsDropped { get; private set; }
 
     public Vector2I Position
     {
@@ -29,6 +30,7 @@ public abstract class GameObject
 
     public void Drop()
     {
+        IsDropped = true;
         PositionChanged = null;
     }
 

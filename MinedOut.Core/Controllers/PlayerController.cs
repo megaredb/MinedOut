@@ -63,7 +63,11 @@ public class PlayerController : Controller
 
         foreach (var entity in _gameState.World.Entities)
             if (entity.Position.Equals(newPosition))
+            {
+                if (entity is LiveMine) _gameState.CallGameOver();
+
                 return;
+            }
 
         _gameState.World[_player.Position.X, _player.Position.Y] = CellsRegistry.Path;
 

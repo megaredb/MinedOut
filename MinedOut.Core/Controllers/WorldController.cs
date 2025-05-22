@@ -28,5 +28,6 @@ public class WorldController : Controller
     private void OnNewEntityAdded(Entity entity)
     {
         if (entity is Player player) _controllers.Add(new PlayerController(player, _gameInput, _gameState, _audio));
+        else if (entity is LiveMine liveMine) _controllers.Add(new LiveMineController(liveMine, _gameState));
     }
 }

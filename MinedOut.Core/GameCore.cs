@@ -1,41 +1,29 @@
 using MinedOut.Core.Controllers;
 using MinedOut.Core.Input;
 using MinedOut.Core.Logic;
-using MinedOut.Core.Renderer;
 
 namespace MinedOut.Core;
 
-public class GameCore<TRenderer, TGameInput, TAudio>
-    where TRenderer : IRenderer
-    where TGameInput : IGameInput
-    where TAudio : IAudio
+public class GameCore
 {
-    private readonly IAudio _audio;
-    private readonly ExitController _exitController;
-    private readonly IGameInput _gameInput;
-    private readonly GameOverController _gameOverController;
-    private readonly MenuController _menuController;
-    private readonly IRenderer _renderer;
-    private readonly WorldController _worldController;
+    private readonly List<Controller> _controllers = new();
+    public readonly IAudio Audio;
+    public readonly IGameInput GameInput;
     public readonly GameState GameState;
 
-    public GameCore()
+    public GameCore(GameState gameState, IAudio audio, IGameInput gameInput)
     {
-        GameState = new GameState();
+        GameState = gameState;
 
-        _audio = TAudio.CreateInstance();
-        _renderer = TRenderer.CreateInstance(GameState);
-        _gameInput = TGameInput.CreateInstance(GameState);
+        Audio = audio;
+        GameInput = gameInput;
 
-        _exitController = new ExitController(GameState, _gameInput);
-        _menuController = new MenuController(GameState, _gameInput);
-        _gameOverController = new GameOverController(GameState, _gameInput, _audio);
-        _worldController = new WorldController(GameState, _gameInput, _audio);
-    }
+        _controllers.Add(new ExitController(GameState, GameInput));
+        _controllers.Add(new MenuController(GameState, GameInput));
+        _controllers.Add(new GameOverController(GameState, GameInput, Audio));
+        _controllers.Add(new WorldController(GameState, GameInput, Audio));
+        _controllers.Add(new CheatsController(GameState, GameInput));
 
-    public void Run()
-    {
-        new Thread(() => { _renderer.Render(); }).Start();
-        _gameInput.Run();
+        Audio.PlayBackgroundMusic();
     }
 }

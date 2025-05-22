@@ -58,6 +58,8 @@ public class GameState
 
     public void CallGameOver()
     {
+        if (Screen != Screen.Game) return;
+
         GameOver?.Invoke();
         PreviousScore = Score;
         Score = 0;
@@ -78,6 +80,12 @@ public class GameState
     public event Action? ScoreChanged;
     public event Action? ScreenChanged;
     public event Action? ExitConfirmationOpened;
+    public event Action? RedrawCalled;
+
+    public void Redraw()
+    {
+        RedrawCalled?.Invoke();
+    }
 
     private void OnNextLevel()
     {
@@ -87,6 +95,7 @@ public class GameState
     public void Stop()
     {
         IsRunning = false;
+        CallMenu();
         GameStopped?.Invoke();
     }
 }

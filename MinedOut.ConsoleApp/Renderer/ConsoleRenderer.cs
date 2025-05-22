@@ -2,13 +2,12 @@ using MinedOut.Core.Logic;
 using MinedOut.Core.Logic.Base;
 using MinedOut.Core.Logic.Entities;
 using MinedOut.Core.Logic.World.Cells;
-using MinedOut.Core.Renderer;
 using MinedOut.Core.Utilities;
 using Path = MinedOut.Core.Logic.World.Cells.Path;
 
 namespace MinedOut.ConsoleApp.Renderer;
 
-public class ConsoleRenderer : IRenderer
+public class ConsoleRenderer
 {
     private readonly Dictionary<Type, ColoredChar> _chars = new()
     {
@@ -17,7 +16,8 @@ public class ConsoleRenderer : IRenderer
         { typeof(Mine), new ColoredChar(' ', ConsoleColor.Black) },
         { typeof(Path), new ColoredChar('.', ConsoleColor.Gray) },
         { typeof(Player), new ColoredChar('@', ConsoleColor.Green) },
-        { typeof(Exit), new ColoredChar('$', ConsoleColor.Blue) }
+        { typeof(Exit), new ColoredChar('$', ConsoleColor.Blue) },
+        { typeof(LiveMine), new ColoredChar('*', ConsoleColor.Red) }
     };
 
     private readonly GameState _gameState;
@@ -26,11 +26,15 @@ public class ConsoleRenderer : IRenderer
 
     public ConsoleRenderer(GameState gameState)
     {
+        Console.CursorVisible = false;
+
         _gameState = gameState;
         _gameState.World.EntityAdded += OnNewEntityAdded;
         _gameState.ScreenChanged += Render;
         _gameState.ExitConfirmationOpened += Render;
         _gameState.NextLevel += Render;
+        
+        _gameState.RedrawCalled += Render;
 
         foreach (var entity in _gameState.World.Entities) entity.PositionChanged += OnEntityPositionChanged;
 
@@ -56,12 +60,6 @@ public class ConsoleRenderer : IRenderer
         }
     }
 
-    public static IRenderer CreateInstance(GameState gameState)
-    {
-        Console.CursorVisible = false;
-        return new ConsoleRenderer(gameState);
-    }
-
     public void Render()
     {
         if (!_gameState.IsRunning)
@@ -73,7 +71,7 @@ public class ConsoleRenderer : IRenderer
         var xCenter = _lastWindowSize.X / 2;
         var yCenter = _lastWindowSize.Y / 2;
 
-        if (_gameState.Screen == Screen.Game)
+        if (_gameState.Screen == Screen.Game && !_gameState.ExitConfirmation)
         {
             for (var y = 0; y < _gameState.World.Height; y++)
             {
