@@ -1,19 +1,19 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using MinedOut.Core;
 using MinedOut.Core.Logic;
 using MinedOut.DesktopApp.Audio;
 using MinedOut.DesktopApp.Input;
+using MinedOut.DesktopApp.Renderer;
 
 namespace MinedOut.DesktopApp;
 
 public class App : Game
 {
     private readonly DesktopAudio _audio;
-    private readonly DesktopGameInput _gameInput;
     private readonly GameCore _gameCore;
-    private GraphicsDeviceManager _graphics;
-    private SpriteBatch? _spriteBatch;
+    private readonly DesktopGameInput _gameInput;
+    private readonly GraphicsDeviceManager _graphics;
+    private DesktopRenderer? _renderer;
 
     public App()
     {
@@ -30,6 +30,11 @@ public class App : Game
         _gameInput = new DesktopGameInput();
 
         _gameCore = new GameCore(gameState, _audio, _gameInput);
+
+        // Set up window size
+        _graphics.PreferredBackBufferWidth = 1024;
+        _graphics.PreferredBackBufferHeight = 1024;
+        _graphics.ApplyChanges();
     }
 
     protected override void Initialize()
@@ -42,7 +47,8 @@ public class App : Game
 
     protected override void LoadContent()
     {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        _renderer = new DesktopRenderer(_gameCore.GameState, GraphicsDevice);
+        _renderer.LoadContent(this);
         _audio.LoadContent(Content);
     }
 
@@ -55,6 +61,12 @@ public class App : Game
 
     protected override void Draw(GameTime gameTime)
     {
+        // Clear the screen
+        GraphicsDevice.Clear(Color.Black);
+
+        // Render the game
+        _renderer?.Render();
+
         base.Draw(gameTime);
     }
 }
