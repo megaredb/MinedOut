@@ -11,9 +11,9 @@ public class App : Game
 {
     private readonly DesktopAudio _audio;
     private readonly DesktopGameInput _gameInput;
-    private GameCore _gameCore;
+    private readonly GameCore _gameCore;
     private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
+    private SpriteBatch? _spriteBatch;
 
     public App()
     {
@@ -26,6 +26,7 @@ public class App : Game
         gameState.GameStopped += Exit;
 
         _audio = new DesktopAudio();
+        gameState.Audio = _audio;
         _gameInput = new DesktopGameInput();
 
         _gameCore = new GameCore(gameState, _audio, _gameInput);
@@ -34,8 +35,9 @@ public class App : Game
     protected override void Initialize()
     {
         _gameInput.Initialize();
-        
+
         base.Initialize();
+        _gameCore.Audio.PlayBackgroundMusic();
     }
 
     protected override void LoadContent()

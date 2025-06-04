@@ -8,6 +8,7 @@ public class GameState
     private int _score;
 
     private Screen _screen = Screen.Menu;
+    public IAudio? Audio;
 
     public GameState()
     {
@@ -38,8 +39,6 @@ public class GameState
         }
     }
 
-    public int PreviousScore { get; private set; }
-
     public Screen Screen
     {
         get => _screen;
@@ -61,13 +60,13 @@ public class GameState
         if (Screen != Screen.Game) return;
 
         GameOver?.Invoke();
-        PreviousScore = Score;
-        Score = 0;
         Screen = Screen.GameOver;
     }
 
     public void CallNextLevel()
     {
+        if (Screen == Screen.Menu) Score = 0;
+        if (Audio != null) Audio.PlayNextLevelSound();
         Screen = Screen.Game;
         Score += 1;
         NextLevel?.Invoke();

@@ -8,4 +8,10 @@ public class LiveMine : Entity
     {
         Position = position;
     }
+
+    public override bool PlayerInteract(GameState gameState)
+    {
+        gameState.CallGameOver();
+        return true;
+    }
 }

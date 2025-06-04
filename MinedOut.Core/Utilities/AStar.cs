@@ -10,7 +10,6 @@ public class AStar
         var height = grid.GetLength(1);
 
         var startNode = new Node(start) { GCost = 0 };
-        var endNode = new Node(end);
 
         var openList = new List<Node> { startNode };
         var closedList = new HashSet<Vector2I>();
@@ -59,7 +58,8 @@ public class AStar
             var x = current.X + dx[i];
             var y = current.Y + dy[i];
 
-            if (x >= 0 && x < width && y >= 0 && y < height && grid[x, y].IsPassable)
+            if (x >= 0 && x < width && y >= 0 && y < height && grid[x, y].IsPassable &&
+                grid[x, y] != CellsRegistry.Mine)
                 yield return new Vector2I(x, y);
         }
     }

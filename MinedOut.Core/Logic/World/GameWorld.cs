@@ -20,6 +20,7 @@ public class GameWorld
     }
 
     public string Name { get; set; } = "World";
+    public int Difficulty { get; set; } = 3;
 
     public int Height { get; private set; }
     public int Width { get; private set; }

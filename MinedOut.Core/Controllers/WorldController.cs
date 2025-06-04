@@ -22,12 +22,15 @@ public class WorldController : Controller
         _gameState.GameOver += clearFunc;
         _gameState.NextLevel += clearFunc;
 
-        foreach (var entity in _gameState.World.Entities) OnNewEntityAdded(entity);
+        foreach (var entity in _gameState.World.Entities)
+            OnNewEntityAdded(entity);
     }
 
     private void OnNewEntityAdded(Entity entity)
     {
-        if (entity is Player player) _controllers.Add(new PlayerController(player, _gameInput, _gameState, _audio));
-        else if (entity is LiveMine liveMine) _controllers.Add(new LiveMineController(liveMine, _gameState));
+        if (entity is Player player)
+            _controllers.Add(new PlayerController(player, _gameInput, _gameState, _audio));
+        else if (entity is LiveMine liveMine)
+            _controllers.Add(new LiveMineController(liveMine, _gameState));
     }
 }

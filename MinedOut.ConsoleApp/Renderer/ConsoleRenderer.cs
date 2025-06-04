@@ -13,7 +13,7 @@ public class ConsoleRenderer
     {
         { typeof(Wall), new ColoredChar('#', ConsoleColor.DarkGray) },
         { typeof(Air), new ColoredChar(' ') },
-        { typeof(Mine), new ColoredChar(' ', ConsoleColor.Black) },
+        { typeof(Mine), new ColoredChar('*', ConsoleColor.Blue) },
         { typeof(Path), new ColoredChar('.', ConsoleColor.Gray) },
         { typeof(Player), new ColoredChar('@', ConsoleColor.Green) },
         { typeof(Exit), new ColoredChar('$', ConsoleColor.Blue) },
@@ -33,10 +33,11 @@ public class ConsoleRenderer
         _gameState.ScreenChanged += Render;
         _gameState.ExitConfirmationOpened += Render;
         _gameState.NextLevel += Render;
-        
+
         _gameState.RedrawCalled += Render;
 
-        foreach (var entity in _gameState.World.Entities) entity.PositionChanged += OnEntityPositionChanged;
+        foreach (var entity in _gameState.World.Entities)
+            entity.PositionChanged += OnEntityPositionChanged;
 
         _gameState.ScoreChanged += OnScoreChanged;
 
@@ -107,7 +108,7 @@ public class ConsoleRenderer
                 "Game Over",
                 "",
                 "Press Enter to exit to menu",
-                "Your score was: " + _gameState.PreviousScore
+                "Your score was: " + _gameState.Score
             };
 
         yCenter -= lines.Length / 2;

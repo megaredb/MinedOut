@@ -25,13 +25,18 @@ public class LiveMineController : Controller
         new Thread(FollowPlayer).Start();
     }
 
+    private bool ShouldUpdate()
+    {
+        return _gameState.Screen == Screen.Game && !_liveMine.IsDropped;
+    }
+
     private void FollowPlayer()
     {
-        while (_gameState.Screen == Screen.Game && !_liveMine.IsDropped)
+        while (ShouldUpdate())
         {
             Thread.Sleep(1000);
 
-            if (_gameState.Screen != Screen.Game) continue;
+            if (!ShouldUpdate() || _gameState.ExitConfirmation) continue;
 
             if (_targetPlayer == null) continue;
 

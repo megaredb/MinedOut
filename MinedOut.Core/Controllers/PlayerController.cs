@@ -48,26 +48,12 @@ public class PlayerController : Controller
         var cell = _gameState.World[newPosition.X, newPosition.Y];
         if (!cell.IsPassable) return;
 
-        if (cell is Mine)
-        {
-            _gameState.CallGameOver();
-            return;
-        }
+        if (cell.PlayerInteract(_gameState)) return;
 
-        if (cell is Exit)
-        {
-            _audio.PlayNextLevelSound();
-            _gameState.CallNextLevel();
-            return;
-        }
-
-        foreach (var entity in _gameState.World.Entities)
-            if (entity.Position.Equals(newPosition))
-            {
-                if (entity is LiveMine) _gameState.CallGameOver();
-
+        var entity = _gameState.World.Entities.FirstOrDefault(e => e.Position.Equals(newPosition));
+        if (entity != null)
+            if (entity.PlayerInteract(_gameState))
                 return;
-            }
 
         _gameState.World[_player.Position.X, _player.Position.Y] = CellsRegistry.Path;
 

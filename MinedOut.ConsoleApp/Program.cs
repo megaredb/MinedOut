@@ -20,6 +20,7 @@ internal class Program
 
         var gameState = new GameState();
         var audio = new ConsoleAudio(gameState);
+        gameState.Audio = audio;
         var renderer = new ConsoleRenderer(gameState);
         var gameInput = new ConsoleGameInput(gameState);
 

@@ -34,7 +34,8 @@ public abstract class GameObject
         PositionChanged = null;
     }
 
-    public virtual void Tick()
+    public virtual bool PlayerInteract(GameState gameState)
     {
+        return false;
     }
 }
