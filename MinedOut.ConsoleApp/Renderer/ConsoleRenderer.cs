@@ -13,11 +13,13 @@ public class ConsoleRenderer
     {
         { typeof(Wall), new ColoredChar('#', ConsoleColor.DarkGray) },
         { typeof(Air), new ColoredChar(' ') },
-        { typeof(Mine), new ColoredChar('*', ConsoleColor.Blue) },
+        { typeof(Mine), new ColoredChar(' ', ConsoleColor.Blue) },
         { typeof(Path), new ColoredChar('.', ConsoleColor.Gray) },
         { typeof(Player), new ColoredChar('@', ConsoleColor.Green) },
         { typeof(Exit), new ColoredChar('$', ConsoleColor.Blue) },
-        { typeof(LiveMine), new ColoredChar('*', ConsoleColor.Red) }
+        { typeof(LiveMine), new ColoredChar('*', ConsoleColor.Red) },
+        { typeof(BonusCoin), new ColoredChar('@', ConsoleColor.Yellow) },
+        { typeof(Robot), new ColoredChar('R', ConsoleColor.Red) }
     };
 
     private readonly GameState _gameState;

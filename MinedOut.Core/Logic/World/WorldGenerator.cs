@@ -202,9 +202,9 @@ public class WorldGenerator
 
             for (var x = left; x <= right; x++)
             {
-                world[x, cursor.Y] = CellsRegistry.Path;
+                world[x, cursor.Y] = CellsRegistry.Air;
 
-                if (_random.Next(100) < 20 && cursor.Y > 1) world[x, cursor.Y - 1] = CellsRegistry.Path;
+                if (_random.Next(100) < 20 && cursor.Y > 1) world[x, cursor.Y - 1] = CellsRegistry.Air;
             }
 
             Vector2I direction;
@@ -244,8 +244,12 @@ public class WorldGenerator
         }
 
         for (var x = -1; x <= 1; x++)
-            world[Math.Clamp(cursor.X + x, 0, world.Width - 1), 0] =
-                CellsRegistry.Exit;
+        {
+            var exitX = Math.Clamp(cursor.X + x, 0, world.Width - 1);
+
+            world[exitX, 0] = CellsRegistry.Exit;
+            world[exitX, 1] = CellsRegistry.Air;
+        }
 
         for (var x = 1; x <= world.Width - 2; x++) world[x, world.Height - 2] = CellsRegistry.Air;
 
@@ -273,6 +277,70 @@ public class WorldGenerator
         return world;
     }
 
+    private void PlaceBonusCoin(GameWorld world)
+    {
+        var attempts = 0;
+        const int maxAttempts = 50;
+
+        while (attempts < maxAttempts)
+        {
+            var x = _random.Next(2, world.Width - 2);
+            var y = _random.Next(2, world.Height / 2);
+
+            if (world[x, y] is Air &&
+                !world.Entities.Any(e => e.Position.X == x && e.Position.Y == y) &&
+                !IsNearPlayer(world, x, y, 10))
+            {
+                var mineCount = CountAdjacentMines(world, x, y);
+
+                if (mineCount > 0 && mineCount <= 3)
+                {
+                    world[x, y] = CellsRegistry.BonusCoin;
+                    return;
+                }
+            }
+
+            attempts++;
+        }
+
+        var safeX = _random.Next(2, world.Width - 2);
+        var safeY = _random.Next(2, world.Height / 2);
+        if (world[safeX, safeY] is Air) world[safeX, safeY] = CellsRegistry.BonusCoin;
+    }
+
+    private bool IsNearPlayer(GameWorld world, int x, int y, int minDistance)
+    {
+        foreach (var entity in world.Entities.OfType<Player>())
+        {
+            var dx = Math.Abs(entity.Position.X - x);
+            var dy = Math.Abs(entity.Position.Y - y);
+            if (dx < minDistance && dy < minDistance)
+                return true;
+        }
+
+        return false;
+    }
+
+    private int CountAdjacentMines(GameWorld world, int x, int y)
+    {
+        var count = 0;
+
+        for (var dx = -1; dx <= 1; dx++)
+        for (var dy = -1; dy <= 1; dy++)
+        {
+            if (dx == 0 && dy == 0) continue;
+
+            var nx = x + dx;
+            var ny = y + dy;
+
+            if (nx >= 0 && nx < world.Width && ny >= 0 && ny < world.Height)
+                if (world[nx, ny] is Mine)
+                    count++;
+        }
+
+        return count;
+    }
+
     public GameWorld GenerateWorld(int width, int height, int? difficulty = null)
     {
         var world = new GameWorld(width, height);
@@ -287,7 +355,10 @@ public class WorldGenerator
             FreePlayerPath
         );
 
+
         world = PlaceLiveMine(world);
+
+        PlaceBonusCoin(world);
 
         return world;
     }

@@ -42,6 +42,9 @@ public class PlayerController : Controller
     private void MovePlayer(Vector2I movementVector)
     {
         var newPosition = _player.Position + movementVector;
+
+        if (newPosition == _player.Position) return;
+
         newPosition.X = Math.Clamp(newPosition.X, 0, _gameState.World.Width - 1);
         newPosition.Y = Math.Clamp(newPosition.Y, 0, _gameState.World.Height - 1);
 

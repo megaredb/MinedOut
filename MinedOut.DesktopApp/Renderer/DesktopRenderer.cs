@@ -64,6 +64,8 @@ public class DesktopRenderer
         _textures[typeof(Player)] = game.Content.Load<Texture2D>("images/player");
         _textures[typeof(Exit)] = game.Content.Load<Texture2D>("images/exit");
         _textures[typeof(LiveMine)] = game.Content.Load<Texture2D>("images/mine");
+        _textures[typeof(BonusCoin)] = game.Content.Load<Texture2D>("images/coin");
+        _textures[typeof(Robot)] = game.Content.Load<Texture2D>("images/player");
 
         _font = game.Content.Load<SpriteFont>("Fonts/GameFont");
 
@@ -93,7 +95,12 @@ public class DesktopRenderer
                 foreach (var entity in _gameState.World.Entities)
                     if (entity.Position.X == x && entity.Position.Y == y)
                     {
-                        _spriteBatch.Draw(_textures[entity.GetType()], position, Color.White);
+                        var entityType = entity.GetType();
+                        var color = Color.White;
+                        if (entityType == typeof(Robot)) color = Color.Red;
+                        var texture = _textures[entityType];
+
+                        _spriteBatch.Draw(texture, position, color);
 
                         if (entity is Player player)
                         {
@@ -105,10 +112,6 @@ public class DesktopRenderer
                                 (CellSize - textSize.Y) / 2
                             );
                             var minesColor = GetMineCountColor(nearbyMines);
-                            _spriteBatch.Draw(
-                                _textures[typeof(Path)],
-                                new Rectangle((int)position.X, (int)position.Y, CellSize, CellSize),
-                                Color.Transparent);
                             _spriteBatch.DrawString(_font, minesText, textPosition, minesColor);
                         }
                     }

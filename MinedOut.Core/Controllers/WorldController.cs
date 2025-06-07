@@ -32,5 +32,7 @@ public class WorldController : Controller
             _controllers.Add(new PlayerController(player, _gameInput, _gameState, _audio));
         else if (entity is LiveMine liveMine)
             _controllers.Add(new LiveMineController(liveMine, _gameState));
+        else if (entity is Robot robot)
+            _controllers.Add(new RobotController(robot, _gameState));
     }
 }

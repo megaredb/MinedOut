@@ -31,7 +31,6 @@ public class App : Game
 
         _gameCore = new GameCore(gameState, _audio, _gameInput);
 
-        // Set up window size
         _graphics.PreferredBackBufferWidth = 1024;
         _graphics.PreferredBackBufferHeight = 1024;
         _graphics.ApplyChanges();
