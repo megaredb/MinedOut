@@ -13,7 +13,7 @@ public class ConsoleRenderer
     {
         { typeof(Wall), new ColoredChar('#', ConsoleColor.DarkGray) },
         { typeof(Air), new ColoredChar(' ') },
-        { typeof(Mine), new ColoredChar(' ', ConsoleColor.Blue) },
+        { typeof(Mine), new ColoredChar('*', ConsoleColor.Blue) },
         { typeof(Path), new ColoredChar('.', ConsoleColor.Gray) },
         { typeof(Player), new ColoredChar('@', ConsoleColor.Green) },
         { typeof(Exit), new ColoredChar('$', ConsoleColor.Blue) },

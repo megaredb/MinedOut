@@ -355,6 +355,16 @@ public class WorldGenerator
             FreePlayerPath
         );
 
+        Vector2I? exitPosition = null;
+
+        for (var x = 1; x < world.Width - 1; x++)
+        for (var y = 1; y < world.Height - 1; y++)
+            if (world[x, y] is Air)
+                exitPosition = new Vector2I(x, y);
+
+        if (exitPosition is not null && !new MinedOutSolver(world)
+                .Solve(new Vector2I(width / 2, height - 1), exitPosition)
+                .reachedTarget) return new WorldGenerator().GenerateWorld(width, height, difficulty);
 
         world = PlaceLiveMine(world);
 

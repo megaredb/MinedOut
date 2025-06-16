@@ -6,7 +6,7 @@ namespace MinedOut.Core.Utilities;
 
 public class GameWorldOracle
 {
-    private static readonly Vector2I[] Directions =
+    public readonly Vector2I[] Directions =
     {
         new(0, 1), new(0, -1), new(1), new(-1)
     };
@@ -36,6 +36,11 @@ public class GameWorldOracle
         return IsValidPosition(pos) &&
                _world[pos.X, pos.Y] is Air or Exit or Path;
     }
+
+    public bool IsExit(Vector2I pos)
+    {
+        return IsValidPosition(pos) && _world[pos.X, pos.Y] is Exit;
+    }
 }
 
 public class MinedOutSolver
@@ -47,12 +52,6 @@ public class MinedOutSolver
         Visited,
         Mine
     }
-
-    private static readonly Vector2I[] Directions =
-    {
-        new(0, 1), new(0, -1), new(1), new(-1)
-    };
-
     private readonly HashSet<Vector2I> _frontier;
     private readonly CellState[,] _grid;
     private readonly int[,] _mineCount;
@@ -84,7 +83,9 @@ public class MinedOutSolver
 
             if (!_oracle.IsPassable(pos))
                 _grid[y, x] = CellState.Mine;
-            else if (IsNearBottom(y)) _grid[y, x] = CellState.Safe;
+            else if (
+                IsNearBottom(y) || _oracle.IsExit(pos)
+            ) _grid[y, x] = CellState.Safe;
         }
     }
 
@@ -93,20 +94,14 @@ public class MinedOutSolver
         return y >= _height - 2;
     }
 
-    private bool IsValidPosition(Vector2I pos)
-    {
-        return pos.X >= 0 && pos.X < _width &&
-               pos.Y >= 0 && pos.Y < _height;
-    }
-
     private List<Vector2I> GetPassableNeighbors(Vector2I pos)
     {
         var neighbors = new List<Vector2I>(4);
 
-        foreach (var dir in Directions)
+        foreach (var dir in _oracle.Directions)
         {
             var neighbor = pos + dir;
-            if (IsValidPosition(neighbor) && _oracle.IsPassable(neighbor)) neighbors.Add(neighbor);
+            if (_oracle.IsValidPosition(neighbor) && _oracle.IsPassable(neighbor)) neighbors.Add(neighbor);
         }
 
         return neighbors;
@@ -123,7 +118,9 @@ public class MinedOutSolver
 
         var closest = _frontier.MinBy(pos =>
             Math.Abs(pos.X - target.X) + Math.Abs(pos.Y - target.Y));
-
+        
+        if (closest == null) return null;
+        
         _frontier.Remove(closest);
         return closest;
     }

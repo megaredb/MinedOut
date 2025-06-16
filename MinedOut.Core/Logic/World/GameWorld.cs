@@ -51,7 +51,7 @@ public class GameWorld
 
     public void Reset()
     {
-        Grid = new Cell[Width, Height];
+        Grid = new Cell[Height, Width];
 
         for (var x = 0; x < Width; x++)
         for (var y = 0; y < Height; y++)

@@ -20,7 +20,12 @@ public class DesktopGameInput : IGameInput
             { MonoGameKeys.D, Keys.Right },
             { MonoGameKeys.Right, Keys.Right },
             { MonoGameKeys.Escape, Keys.Escape },
-            { MonoGameKeys.Enter, Keys.Enter }
+            { MonoGameKeys.Enter, Keys.Enter },
+            { MonoGameKeys.H, Keys.H },
+            { MonoGameKeys.E, Keys.E },
+            { MonoGameKeys.O, Keys.O },
+            { MonoGameKeys.Y, Keys.Y },
+            { MonoGameKeys.M, Keys.M }
         };
 
     private KeyboardState _oldKeyboardState;
