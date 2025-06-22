@@ -1,4 +1,4 @@
-namespace MinedOut.Core;
+namespace MinedOut.Core.Audio;
 
 public interface IAudio
 {
