@@ -1,6 +1,5 @@
 namespace MinedOut.Core.Utilities;
 
-[Serializable]
 public class Vector2I(int x = 0, int y = 0) : IEquatable<Vector2I>
 {
     public static readonly Vector2I Zero = new();

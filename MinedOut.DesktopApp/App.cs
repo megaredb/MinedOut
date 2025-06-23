@@ -60,10 +60,8 @@ public class App : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        // Clear the screen
         GraphicsDevice.Clear(Color.Black);
 
-        // Render the game
         _renderer?.Render();
 
         base.Draw(gameTime);
